@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: music-diary
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      # Для сохранности данных между перезапусками подключите постоянный диск
+      # (Render Dashboard -> Disks), смонтируйте его, например, в /var/data и
+      # раскомментируйте строку ниже:
+      # - key: DATABASE_PATH
+      #   value: /var/data/music_diary.db

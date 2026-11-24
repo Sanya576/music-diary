@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Diary — музыкальные рецензии</title>
+  <link rel="icon" type="image/svg+xml" href="/static/img/logo.svg">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div>
+        <h1 class="site-title"><img src="/static/img/logo.svg" alt="" class="site-logo" aria-hidden="true"><span class="site-title-text">Music Diary</span></h1>
+        <p class="site-tagline">Делитесь впечатлениями о любимой музыке</p>
+      </div>
+      <div class="counter" id="counter">Рецензий на сайте: 0</div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ==================== Форма создания / редактирования ==================== -->
+    <section class="form-panel" id="formPanel">
+      <h2 class="form-title" id="formTitle">Новая рецензия</h2>
+
+      <form id="reviewForm" novalidate>
+        <input type="hidden" id="reviewId" value="">
+
+        <div class="field">
+          <label for="title" id="titleLabel">Название альбома / трека</label>
+          <input type="text" id="title" name="title" placeholder="Например: Midnights">
+          <span class="field-error" id="titleError"></span>
+        </div>
+
+        <div class="field" id="artistField">
+          <label for="artist">Исполнитель</label>
+          <input type="text" id="artist" name="artist" placeholder="Например: Taylor Swift">
+          <span class="field-error" id="artistError"></span>
+        </div>
+
+        <div class="field">
+          <label>Тип объекта</label>
+          <div class="type-group" id="entityTypeGroup">
+            <label class="type-chip"><input type="radio" name="entity_type" value="album" checked><span>Альбом</span></label>
+            <label class="type-chip"><input type="radio" name="entity_type" value="track"><span>Трек</span></label>
+            <label class="type-chip"><input type="radio" name="entity_type" value="artist"><span>Исполнитель</span></label>
+          </div>
+          <span class="field-error" id="entityTypeError"></span>
+        </div>
+
+        <div class="field">
+          <label for="genre">Жанр</label>
+          <select id="genre" name="genre">
+            <option value="">— Выберите жанр —</option>
+            <option>Рок</option>
+            <option>Поп</option>
+            <option>Рэп</option>
+            <option>Инди</option>
+            <option>Электроника</option>
+            <option>Джаз</option>
+            <option>Метал</option>
+            <option>R&B</option>
+            <option>Другое</option>
+          </select>
+          <span class="field-error" id="genreError"></span>
+        </div>
+
+        <div class="field">
+          <label>Оценка</label>
+          <div class="star-rating" id="starRating" role="radiogroup" aria-label="Оценка от 1 до 5">
+            <button type="button" data-value="1" aria-label="1 звезда">★</button>
+            <button type="button" data-value="2" aria-label="2 звезды">★</button>
+            <button type="button" data-value="3" aria-label="3 звезды">★</button>
+            <button type="button" data-value="4" aria-label="4 звезды">★</button>
+            <button type="button" data-value="5" aria-label="5 звёзд">★</button>
+          </div>
+          <input type="hidden" id="rating" value="0">
+          <span class="field-error" id="ratingError"></span>
+        </div>
+
+        <div class="field">
+          <label for="text">Текст рецензии</label>
+          <textarea id="text" name="text" rows="5" placeholder="Ваше мнение об альбоме, треке или исполнителе (от 10 символов)..."></textarea>
+          <span class="field-error" id="textError"></span>
+        </div>
+
+        <div class="field">
+          <label for="cover_url">Ссылка на обложку</label>
+          <input type="url" id="cover_url" name="cover_url" placeholder="https://example.com/cover.jpg">
+          <span class="field-error" id="coverUrlError"></span>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" id="submitBtn" class="btn btn-primary">Сохранить</button>
+          <button type="button" id="cancelBtn" class="btn btn-ghost" hidden>Отмена</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ==================== Лента рецензий ==================== -->
+    <section class="feed-panel">
+      <div class="toolbar">
+        <input type="search" id="search" class="search-input" placeholder="Поиск по названию или исполнителю...">
+        <select id="genreFilter" class="toolbar-select">
+          <option value="all">Все жанры</option>
+          <option>Рок</option>
+          <option>Поп</option>
+          <option>Рэп</option>
+          <option>Инди</option>
+          <option>Электроника</option>
+          <option>Джаз</option>
+          <option>Метал</option>
+          <option>R&B</option>
+          <option>Другое</option>
+        </select>
+        <select id="sortFilter" class="toolbar-select">
+          <option value="date_desc">Сначала новые</option>
+          <option value="date_asc">Сначала старые</option>
+          <option value="rating_desc">По рейтингу: высокие</option>
+          <option value="rating_asc">По рейтингу: низкие</option>
+        </select>
+        <button type="button" id="resetFilters" class="btn btn-ghost btn-sm">Сбросить</button>
+      </div>
+
+      <div class="feed-status">
+        <span id="filteredHint" class="filtered-hint"></span>
+      </div>
+
+      <div id="reviewsList" class="reviews-list"></div>
+
+      <div id="loadingState" class="empty-state" hidden>Загрузка…</div>
+      <div id="emptyState" class="empty-state" hidden>Рецензий не найдено</div>
+    </section>
+  </main>
+
+  <!-- ==================== Уведомления ==================== -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- ==================== Модальное окно подтверждения удаления ==================== -->
+  <div id="confirmModal" class="modal-backdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h3 id="modalTitle">Удалить рецензию?</h3>
+      <p class="modal-text">Это действие нельзя отменить.</p>
+      <div class="modal-actions">
+        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Удалить</button>
+        <button type="button" id="cancelDeleteBtn" class="btn btn-ghost">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

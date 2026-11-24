@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+.venv2/
+venv/
+env/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+.env
+.DS_Store
+
+# Локальные артефакты (не для git)
+cloudflared.exe
+qr.png

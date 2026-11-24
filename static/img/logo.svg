@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="mdGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#ec4899"/>
+    </linearGradient>
+  </defs>
+  <!-- Виниловая пластинка -->
+  <circle cx="32" cy="32" r="30" fill="#171728"/>
+  <circle cx="32" cy="32" r="28.5" fill="none" stroke="url(#mdGrad)" stroke-width="3"/>
+  <circle cx="32" cy="32" r="21" fill="none" stroke="#34344f" stroke-width="1.5"/>
+  <circle cx="32" cy="32" r="16" fill="none" stroke="#34344f" stroke-width="1.5"/>
+  <!-- Этикетка -->
+  <circle cx="32" cy="32" r="12" fill="url(#mdGrad)"/>
+  <!-- Нота -->
+  <g fill="#ffffff">
+    <ellipse cx="27" cy="37.5" rx="4.4" ry="3.2" transform="rotate(-20 27 37.5)"/>
+    <rect x="30.5" y="24.5" width="2" height="13.5" rx="1"/>
+    <path d="M32.5 24.6 C37 26.6 40.3 29.9 39.4 34.4 C37 31.4 34.2 28.8 32.5 27.6 Z"/>
+  </g>
+</svg>
